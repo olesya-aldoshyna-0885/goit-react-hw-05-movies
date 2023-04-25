@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Container, CardsWrapper, MovieName, Images } from "../styles/MoviesList.styled";
-import { notFound } from "../images/notFound.jpg";
+import notFound from "../images/notFound.jpg";
 
 const MoviesList = ({ movies }) => {
     const location = useLocation();
@@ -26,8 +26,6 @@ const MoviesList = ({ movies }) => {
     )
 }
 
-export default MoviesList;
-
 MoviesList.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.shape({
@@ -37,3 +35,5 @@ MoviesList.propTypes = {
     })
   ).isRequired,
 };
+
+export default MoviesList;

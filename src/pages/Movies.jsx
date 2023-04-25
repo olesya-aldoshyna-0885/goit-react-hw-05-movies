@@ -1,8 +1,8 @@
 import { Suspense, useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useSearchParams } from "react-router-dom";
-import { getMovieByName } from 'moviesAPI';
+import { getMovieByName } from '../movieAPI';
 import { Container, CardsWrapper, Images, MovieName } from "../styles/MoviesList.styled"
-import { SearchBar } from "../components/SearchBar";
+import SearchBar from "../components/SearchBar";
 import notFound from "../images/notFound.jpg";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { HiSearch } from 'react-icons/hi';
 
 export const Icon = styled(HiSearch)`
