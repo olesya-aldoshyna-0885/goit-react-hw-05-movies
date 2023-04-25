@@ -1,16 +1,23 @@
-import { Suspense, useRef } from 'react';
-import { Link, Outlet, useParams, useLocation } from 'react-router-dom';
+import { Suspense, useEffect, useState } from "react";
+import { generatePath, Outlet, useLocation, useParams } from "react-router-dom";
+import { getMovieById } from "moviesAPI";
+import notFound from "../images/notFound.jpg";
+import {
+  CardWrapper,
+  GoBackLink,
+  Image,
+  InfoWrapper,
+  ItemLink,
+  ListLink,
+  Link,
+} from '../styles/MovieDetails.styled';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-// 1. http://localhost:3000/dogs?dogId=2
-// 2. http://localhost:3000/dogs/dog-2
-// 3. const backLinkLocationRef = useRef(location.state?.from ?? '/dogs');
-// 4. http://localhost:3000/dogs/dog-2/gallery
-// 5. backLinkLocationRef не меняется и все еще ведет на http://localhost:3000/dogs?dogId=2
-
-const DogDetails = () => {
+const MovieDetails = () => {
   const location = useLocation();
-  const backLinkLocationRef = useRef(location.state?.from ?? '/dogs');
-  const { dogId } = useParams();
+  const [movie, setMovie] = useState({});
+  const { movieId } = useParams();
 
   // useEffect(() => {
   // HTTP запрос, если нужно
