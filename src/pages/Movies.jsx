@@ -1,61 +1,63 @@
-import { Suspense, useEffect, useState } from "react";
-import { Link, Outlet, useLocation, useSearchParams } from "react-router-dom";
-import { getMovieByName } from '../movieAPI';
-import { Container, CardsWrapper, Images, MovieName } from "../styles/MoviesList.styled"
-import SearchBar from "../components/SearchBar";
-import notFound from "../images/notFound.jpg";
+import {
+  CardsWrapper,
+  MovieName,
+  Container,
+  Images,
+} from 'styles/MoviesList.styled';
+import SearchBar from 'components/SearchBar';
+import { getMovieByName } from "../movieAPI";
+import { Suspense, useEffect, useState } from 'react';
+import { Link, Outlet, useLocation, useSearchParams } from 'react-router-dom';
+import notFound from '../images/notFound.jpg';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Movies = () => {
-  const [ movies, setMovies ] = useState([]);
-  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const movieName = searchParams.get('movieName') ?? '';
+  const movieName = searchParams.get('name') ?? '';
+  const [movies, setMovies] = useState([]);
+  const location = useLocation();
 
-    useEffect(() => {
-        getMovieByName(movieName).then(({ results }) => {
-            setMovies([...results]);
-        })
-            .catch(() =>
-                toast.error(`Oops, something went wrong! Please try again later!`)
-        )
-    }, [movieName]);
+  useEffect(() => {
+    getMovieByName(movieName)
+      .then(({ results }) => {
+        setMovies([...results]);
+      })
+      .catch(() =>
+        toast.error(`Whoops, something went wrong! Please try again later!`)
+      );
+  }, [movieName]);
 
-  const updateQueryString = evt => {
-    const movieNameValue = evt.target.value;
-    if (movieNameValue === '') {
-      return setSearchParams({});
-    }
-    setSearchParams({ movieName: movieNameValue });
+  const handleFormSubmit = name => {
+    const nextParams = name !== '' ? { name } : {};
+    setSearchParams(nextParams);
+    setMovies([]);
   };
 
   return (
     <main>
-      <SearchBar type="text" value={movieName} onSubmit={updateQueryString} />
+      <SearchBar type= "text" onSubmit={handleFormSubmit} />
       <Container>
-        {movies.map(({id, original_title, poster_path}) => {
-          return (
-            <CardsWrapper  key={id}>
-              <Link to={`${id}`} state={{ from: location }}>
-                <Images
-                    src={
-                        poster_path
-                        ? `https://image.tmdb.org/t/p/w342/${poster_path}`
-                        : `${notFound}`
-                    }
-                    alt={original_title}
-                />
-                <MovieName>{original_title}</MovieName>
-              </Link>
-            </CardsWrapper>
-          );
-        })}
-            <Suspense>
-              <Outlet />
-            </Suspense>
-            <ToastContainer />
-          </Container>
+        {movies.map(({ id, original_title, poster_path }) => (
+          <CardsWrapper key={id}>
+            <Link state={{ from: location }} to={`${id}`}>
+              <Images
+                src={
+                  poster_path
+                    ? `https://image.tmdb.org/t/p/w342/${poster_path}`
+                    : `${notFound}`
+                }
+                alt={original_title}
+              />
+              <MovieName>{original_title}</MovieName>
+            </Link>
+          </CardsWrapper>
+        ))}
+        <Suspense>
+          <Outlet />
+        </Suspense>
+      </Container>
+      <ToastContainer />
     </main>
   );
 };

@@ -27,7 +27,7 @@ export const MainLink = styled(NavLink)`
   color: black;
   font-weight: 500;
   &:hover {
-    color: ${props => props.theme.colors.white};
+    color: ${props=>props.theme.colors.white};
   }
   &.active {
     color: ${props => props.theme.colors.accent};
